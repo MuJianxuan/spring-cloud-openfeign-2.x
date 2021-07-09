@@ -22,6 +22,9 @@ import java.util.Objects;
 import org.springframework.cloud.context.named.NamedContextFactory;
 
 /**
+ *
+ *
+ * Specification: 规格
  * @author Dave Syer
  * @author Gregor Zurowski
  */

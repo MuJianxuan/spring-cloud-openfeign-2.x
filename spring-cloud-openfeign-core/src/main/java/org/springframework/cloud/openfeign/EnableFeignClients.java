@@ -84,6 +84,9 @@ public @interface EnableFeignClients {
 	Class<?>[] basePackageClasses() default {};
 
 	/**
+	 * 所有 feign 客户端的自定义@Configuration 。 可以包含构成客户端的部分的覆盖@Bean定义，
+	 *  	例如feign.codec.Decoder 、 feign.codec.Encoder 、 feign.Contract 。
+	 *
 	 * A custom <code>@Configuration</code> for all feign clients. Can contain override
 	 * <code>@Bean</code> definition for the pieces that make up the client, for instance
 	 * {@link feign.codec.Decoder}, {@link feign.codec.Encoder}, {@link feign.Contract}.

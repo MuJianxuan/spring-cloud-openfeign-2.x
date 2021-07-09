@@ -168,7 +168,7 @@ class FeignClientsRegistrar
 		Map<String, Object> defaultAttrs = metadata
 				.getAnnotationAttributes(EnableFeignClients.class.getName(), true);
 
-		// 这里要注意的是 defaultAttrs.containsKey("defaultConfiguration") 除非手动，不然一定存在
+		// 这里要注意的是 defaultAttrs.containsKey("defaultConfiguration") 除非手动，不然一定不存在
 		if (defaultAttrs != null && defaultAttrs.containsKey("defaultConfiguration")) {
 			String name;
 			if (metadata.hasEnclosingClass()) {
