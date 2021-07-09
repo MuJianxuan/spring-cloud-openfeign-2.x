@@ -30,8 +30,14 @@ import org.springframework.cloud.context.named.NamedContextFactory;
  */
 class FeignClientSpecification implements NamedContextFactory.Specification {
 
+	/**
+	 * bean 的名称
+	 */
 	private String name;
 
+	/**
+	 * bean 的配置
+	 */
 	private Class<?>[] configuration;
 
 	FeignClientSpecification() {

@@ -19,6 +19,7 @@ package org.springframework.cloud.openfeign;
 import org.springframework.cloud.context.named.NamedContextFactory;
 
 /**
+ * 创建 feign 类实例的工厂。 它为每个客户端名称创建一个 Spring ApplicationContext，并从那里提取它需要的 bean。
  * A factory that creates instances of feign classes. It creates a Spring
  * ApplicationContext per client name, and extracts the beans that it needs from there.
  *

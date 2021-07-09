@@ -58,8 +58,7 @@ import org.springframework.util.StringUtils;
  * @author Venil Noronha
  * @author Gang Li
  */
-class FeignClientsRegistrar
-		implements ImportBeanDefinitionRegistrar, ResourceLoaderAware, EnvironmentAware {
+class FeignClientsRegistrar implements ImportBeanDefinitionRegistrar, ResourceLoaderAware, EnvironmentAware {
 
 	// patterned after Spring Integration IntegrationComponentScanRegistrar
 	// and RibbonClientsConfigurationRegistgrar
@@ -153,8 +152,7 @@ class FeignClientsRegistrar
 	 * @param registry
 	 */
 	@Override
-	public void registerBeanDefinitions(AnnotationMetadata metadata,
-			BeanDefinitionRegistry registry) {
+	public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
 		// 1.注册 FeignClientSpecification 的 BeanDefinition，
 		// 并将在 @EnableFeignClients 中 defaultConfiguration 属性值作为属性放入其中
 		registerDefaultConfiguration(metadata, registry);
@@ -162,13 +160,12 @@ class FeignClientsRegistrar
 		registerFeignClients(metadata, registry);
 	}
 
-	private void registerDefaultConfiguration(AnnotationMetadata metadata,
-			BeanDefinitionRegistry registry) {
+	private void registerDefaultConfiguration(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
 		// 获取 EnableFeignClients 中属性值
 		Map<String, Object> defaultAttrs = metadata
 				.getAnnotationAttributes(EnableFeignClients.class.getName(), true);
 
-		// 这里要注意的是 defaultAttrs.containsKey("defaultConfiguration") 除非手动，不然一定不存在
+		// 这里要注意的是 defaultAttrs.containsKey("defaultConfiguration")
 		if (defaultAttrs != null && defaultAttrs.containsKey("defaultConfiguration")) {
 			String name;
 			if (metadata.hasEnclosingClass()) {
@@ -197,11 +194,9 @@ class FeignClientsRegistrar
 
 		Set<String> basePackages;
 
-		Map<String, Object> attrs = metadata
-				.getAnnotationAttributes(EnableFeignClients.class.getName());
+		Map<String, Object> attrs = metadata.getAnnotationAttributes(EnableFeignClients.class.getName());
 		// @FeignClient 注解过滤器
-		AnnotationTypeFilter annotationTypeFilter = new AnnotationTypeFilter(
-				FeignClient.class);
+		AnnotationTypeFilter annotationTypeFilter = new AnnotationTypeFilter(FeignClient.class);
 
 		final Class<?>[] clients = attrs == null ? null
 				: (Class<?>[]) attrs.get("clients");
@@ -235,11 +230,14 @@ class FeignClientsRegistrar
 		for (String basePackage : basePackages) {
 			// 在当前包下，将带 @FeignClient 注解扫描出来(其实这些都很简单，不懂就去看 spring 源码)
 			// 很明显这个 扫描器 很厉害，至于是怎么实现的，参考 xml解析就知道啦
+
+			// 所有添加 @FeignClient 注解的接口
 			Set<BeanDefinition> candidateComponents = scanner.findCandidateComponents( basePackage);
 
 			for (BeanDefinition candidateComponent : candidateComponents) {
 				// 注解Bean定义
 				if (candidateComponent instanceof AnnotatedBeanDefinition) {
+					//验证带注释的类是一个接口
 					// verify annotated class is an interface
 					AnnotatedBeanDefinition beanDefinition = (AnnotatedBeanDefinition) candidateComponent;
 					// 获取当前 bean 的元注解
@@ -257,7 +255,7 @@ class FeignClientsRegistrar
 					registerClientConfiguration( registry, name, attributes.get("configuration"));
 
 					// 需要留意的是 这里是每一个 FeignClient 接口都注入一个相应处理的  FeignClientFactoryBean
-					// 注册一个 FeignClientFactoryBean 的 BeanDefinition
+					// 注册一个 FeignClientFactoryBean 的 BeanDefinition  把谁注册？ 是被@FeignClient注解接口
 					registerFeignClient( registry, annotationMetadata, attributes);
 				}
 			}
@@ -265,6 +263,7 @@ class FeignClientsRegistrar
 	}
 
 	/**
+	 * 为每一个 @FeignClient 注解的接口注入一个 xxxFactoryBean<T>  FeignClientFactoryBean
 	 * 本质是 注入 FeignClientFactoryBean 类
 	 * @param registry
 	 * @param annotationMetadata
@@ -298,8 +297,6 @@ class FeignClientsRegistrar
 
 		// has a default, won't be null
 		boolean primary = (Boolean) attributes.get("primary");
-
-
 		beanDefinition.setPrimary(primary);
 
 		String qualifier = getQualifier(attributes);

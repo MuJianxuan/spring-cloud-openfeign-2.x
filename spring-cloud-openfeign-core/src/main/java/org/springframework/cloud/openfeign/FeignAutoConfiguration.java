@@ -53,6 +53,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
+ * 自动配置类
  * @author Spencer Gibb
  * @author Julien Roy
  */
@@ -63,6 +64,9 @@ import org.springframework.context.annotation.Import;
 @Import(DefaultGzipDecoderConfiguration.class)
 public class FeignAutoConfiguration {
 
+	/**
+	 * 所有的配置信息
+	 */
 	@Autowired(required = false)
 	private List<FeignClientSpecification> configurations = new ArrayList<>();
 

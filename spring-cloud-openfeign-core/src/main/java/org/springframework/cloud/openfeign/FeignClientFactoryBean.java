@@ -46,19 +46,24 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
+ *
+ * 关注InitializingBean 接口
+ *
  * @author Spencer Gibb
  * @author Venil Noronha
  * @author Eko Kurniawan Khannedy
  * @author Gregor Zurowski
  */
-class FeignClientFactoryBean
-		implements FactoryBean<Object>, InitializingBean, ApplicationContextAware {
+class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, ApplicationContextAware {
 
 	/***********************************
 	 * WARNING! Nothing in this class should be @Autowired. It causes NPEs because of some
 	 * lifecycle race condition.
 	 ***********************************/
 
+	/**
+	 * 类型  : 盲猜 >> 接口类型
+	 */
 	private Class<?> type;
 
 	private String name;
@@ -73,16 +78,24 @@ class FeignClientFactoryBean
 
 	private ApplicationContext applicationContext;
 
+	// 为什么要设置成 void.class
 	private Class<?> fallback = void.class;
 
+	// 设置成 void.class
 	private Class<?> fallbackFactory = void.class;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
+		// 只做参数检查
 		Assert.hasText(this.contextId, "Context id must be set");
 		Assert.hasText(this.name, "Name must be set");
 	}
 
+	/**
+	 * feign
+	 * @param context
+	 * @return
+	 */
 	protected Feign.Builder feign(FeignContext context) {
 		// 从 Feign 上下文中获取 FeignLoggerFactory，我认为实际就是从 IOC 容器中获取的
 		FeignLoggerFactory loggerFactory = get(context, FeignLoggerFactory.class);
@@ -104,31 +117,33 @@ class FeignClientFactoryBean
 		return builder;
 	}
 
+	/**
+	 * 对 yaml中 Feign的配置进行 处理
+	 * @param context
+	 * @param builder
+	 */
 	protected void configureFeign(FeignContext context, Feign.Builder builder) {
 		// 从 IOC 中获取 FeignClientProperties
 		FeignClientProperties properties = this.applicationContext
 				.getBean(FeignClientProperties.class);
-		if (properties != null) {
-			if (properties.isDefaultToProperties()) {
-				// 从 Feign 上下文 FeignContext 中获取配置
-				configureUsingConfiguration(context, builder);
-				// 从 FeignClientProperties 中获取配置
-				configureUsingProperties(
-						properties.getConfig().get(properties.getDefaultConfig()),
-						builder);
-				configureUsingProperties(properties.getConfig().get(this.contextId),
-						builder);
-			}
-			else {
-				configureUsingProperties(
-						properties.getConfig().get(properties.getDefaultConfig()),
-						builder);
-				configureUsingProperties(properties.getConfig().get(this.contextId),
-						builder);
-				configureUsingConfiguration(context, builder);
-			}
+
+		// 默认参数
+		if (properties.isDefaultToProperties()) {
+			// 从 Feign 上下文 FeignContext 中获取配置
+			configureUsingConfiguration(context, builder);
+			// 从 FeignClientProperties 中获取配置
+			configureUsingProperties(
+					properties.getConfig().get(properties.getDefaultConfig()),
+					builder);
+			configureUsingProperties(properties.getConfig().get(this.contextId),
+					builder);
 		}
 		else {
+			configureUsingProperties(
+					properties.getConfig().get(properties.getDefaultConfig()),
+					builder);
+			configureUsingProperties(properties.getConfig().get(this.contextId),
+					builder);
 			configureUsingConfiguration(context, builder);
 		}
 	}
@@ -260,11 +275,11 @@ class FeignClientFactoryBean
 	}
 
 	protected <T> T getOptional(FeignContext context, Class<T> type) {
+		// 本质是从 Spring 容器中获取
 		return context.getInstance(this.contextId, type);
 	}
 
-	protected <T> T loadBalance(Feign.Builder builder, FeignContext context,
-			HardCodedTarget<T> target) {
+	protected <T> T loadBalance(Feign.Builder builder, FeignContext context, HardCodedTarget<T> target) {
 		// 获得 FeignClient
 		Client client = getOptional(context, Client.class);
 		if (client != null) {
@@ -283,31 +298,35 @@ class FeignClientFactoryBean
 	}
 
 	/**
+	 * 获取实际的Bean对象
 	 * @param <T> the target type of the Feign client
 	 * @return a {@link Feign} client created with the specified data and the context
-	 * information
+	 * information   使用指定数据和上下文信息创建的Feign客户端
 	 */
 	<T> T getTarget() {
 		// 获取 Feign 的上下文对象 FeignContext （这个对象是自动装配 FeignAutoConfiguration 而来）
 		// （做一个记号研究TraceFeignContext extends FeignContext,实际作用是 TraceFeignContext 属性 delegate =  FeignContext）
 		FeignContext context = this.applicationContext.getBean(FeignContext.class);
 		// 生成 builder 对象，用来生成 feign
-		Feign.Builder builder = feign(context);
+		Feign.Builder builder = feign( context);
 
 		// 判断生成的代理对象类型，如果 url 为空，则走负载均衡，生成有负载均衡功能的代理类
-		if (!StringUtils.hasText(this.url)) {
+		// 如果不包含文本
+		if (! StringUtils.hasText( this.url)) {
 			// url 使用域名形似所以有负载均衡
-			if (!this.name.startsWith("http")) {
+			if (! this.name.startsWith("http")) {
 				this.url = "http://" + this.name;
 			}
 			else {
 				this.url = this.name;
 			}
+			// 处理访问连接
 			this.url += cleanPath();
+
 			// 生成负载均衡代理类
-			return (T) loadBalance(builder, context,
-					new HardCodedTarget<>(this.type, this.name, this.url));
+			return (T) loadBalance( builder, context,  new HardCodedTarget<>(this.type, this.name, this.url) );
 		}
+
 		// url 存在那代表的意义是不是有具体的地址，所以没有负载均衡能力？以后测试一下
 		if (StringUtils.hasText(this.url) && !this.url.startsWith("http")) {
 			this.url = "http://" + this.url;
