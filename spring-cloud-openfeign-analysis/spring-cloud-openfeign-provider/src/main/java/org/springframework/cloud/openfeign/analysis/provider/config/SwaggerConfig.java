@@ -1,4 +1,4 @@
-package org.springframework.cloud.openfeign.analysis.consumer.config;
+package org.springframework.cloud.openfeign.analysis.provider.config;
 
 import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +33,7 @@ public class SwaggerConfig {
                 .groupName("后台管理接口")
                 .apiInfo(apiInfo())
                 // 扫描接口即 Controller 包
-                .select().apis(RequestHandlerSelectors.basePackage("org.springframework.cloud.openfeign.analysis.consumer.rest"))
+                .select().apis(RequestHandlerSelectors.basePackage("org.springframework.cloud.openfeign.analysis.provider.rest"))
                 .paths(PathSelectors.any())
                 .build();
     }

@@ -3,8 +3,8 @@ package org.springframework.cloud.openfeign.analysis.pojo.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -17,10 +17,14 @@ import java.util.Date;
  */
 @ApiModel
 @Data
-@Builder
+@Accessors(chain = true)
 public class User implements Serializable {
+	private static final long serialVersionUID = 662285482455000678L;
 
-    @ApiModelProperty(value = "用户名")
+	public User() {
+	}
+
+	@ApiModelProperty(value = "用户名")
     private String username;
 
     @ApiModelProperty(value = "用户姓名")

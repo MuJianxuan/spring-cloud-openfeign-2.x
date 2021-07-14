@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
+
 /**
  * @Description
  * @Author: kongLiuYi
@@ -23,14 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class UserConsumerController {
 
-	@Autowired
+	@Resource
 	private UserProvider userProvider;
 
 
 	@ApiOperation(value = "获取用户", notes = "获取指定用户信息")
 	@ApiImplicitParam(paramType = "path", name = "id", value = "用户ID", required = true, dataType = "string")
 	@GetMapping(value = "/{id}")
-	public Result get(@PathVariable String id) {
+	public Result get(@PathVariable(name = "id") String id) {
 		log.debug("get with id:{}", id);
 		return userProvider.get(id);
 	}

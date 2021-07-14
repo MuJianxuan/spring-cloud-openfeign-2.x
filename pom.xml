@@ -10,8 +10,8 @@
 	<description>Spring Cloud OpenFeign</description>
 	<parent>
 		<groupId>org.springframework.cloud</groupId>
-		<artifactId>spring-cloud-build</artifactId>
-		<version>2.3.3.RELEASE</version>
+		<artifactId>spring-cloud-openfeign-dependencies</artifactId>
+		<version>2.2.3.RELEASE</version>
 		<relativePath/>
 	</parent>
 	<scm>
@@ -86,14 +86,14 @@
 		</plugins>
 	</build>
 
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</reporting>
+<!--	<reporting>-->
+<!--		<plugins>-->
+<!--			<plugin>-->
+<!--				<groupId>org.apache.maven.plugins</groupId>-->
+<!--				<artifactId>maven-checkstyle-plugin</artifactId>-->
+<!--			</plugin>-->
+<!--		</plugins>-->
+<!--	</reporting>-->
 
 	<dependencyManagement>
 		<dependencies>
@@ -142,7 +142,26 @@
 				<version>2.1.0.RELEASE</version>
 				<type>pom</type>
 				<scope>import</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>com.alibaba.nacos</groupId>
+						<artifactId>nacos-client</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
+
+			<dependency>
+				<groupId>com.alibaba.nacos</groupId>
+				<artifactId>nacos-client</artifactId>
+				<version>2.0.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.alibaba.nacos</groupId>
+				<artifactId>nacos-common</artifactId>
+				<version>2.0.1</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 	<modules>

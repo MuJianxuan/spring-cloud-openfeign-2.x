@@ -32,9 +32,9 @@ import org.springframework.util.StringUtils;
 class HystrixTargeter implements Targeter {
 
 	@Override
-	public <T> T target(FeignClientFactoryBean factory, Feign.Builder feign,
-			FeignContext context, Target.HardCodedTarget<T> target) {
-		if (!(feign instanceof feign.hystrix.HystrixFeign.Builder)) {
+	public <T> T target(FeignClientFactoryBean factory, Feign.Builder feign, FeignContext context, Target.HardCodedTarget<T> target) {
+		// 非 hystrix
+		if (! (feign instanceof feign.hystrix.HystrixFeign.Builder)) {
 			return feign.target(target);
 		}
 		feign.hystrix.HystrixFeign.Builder builder = (feign.hystrix.HystrixFeign.Builder) feign;

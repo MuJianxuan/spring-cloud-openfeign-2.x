@@ -20,4 +20,4 @@ management:
 
 feign:
   hystrix:
-    enabled: true
+    enabled: false

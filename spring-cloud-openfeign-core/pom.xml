@@ -7,7 +7,7 @@
 		<groupId>org.springframework.cloud</groupId>
 		<artifactId>spring-cloud-openfeign</artifactId>
 		<version>2.2.3.RELEASE</version>
-		<relativePath>..</relativePath> <!-- lookup parent from repository -->
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>spring-cloud-openfeign-core</artifactId>
 	<packaging>jar</packaging>

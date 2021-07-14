@@ -303,15 +303,16 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, A
 	 * @return a {@link Feign} client created with the specified data and the context
 	 * information   使用指定数据和上下文信息创建的Feign客户端
 	 */
-	<T> T getTarget() {
+	public  <T> T getTarget() {
 		// 获取 Feign 的上下文对象 FeignContext （这个对象是自动装配 FeignAutoConfiguration 而来）
 		// （做一个记号研究TraceFeignContext extends FeignContext,实际作用是 TraceFeignContext 属性 delegate =  FeignContext）
-		FeignContext context = this.applicationContext.getBean(FeignContext.class);
+		FeignContext context = this.applicationContext.getBean( FeignContext.class);
 		// 生成 builder 对象，用来生成 feign
 		Feign.Builder builder = feign( context);
 
 		// 判断生成的代理对象类型，如果 url 为空，则走负载均衡，生成有负载均衡功能的代理类
 		// 如果不包含文本
+		// 域名服务器 则不需要解析 服务名获取数据
 		if (! StringUtils.hasText( this.url)) {
 			// url 使用域名形似所以有负载均衡
 			if (! this.name.startsWith("http")) {

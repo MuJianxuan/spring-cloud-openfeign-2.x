@@ -18,6 +18,7 @@ package org.springframework.cloud.openfeign.hateoas;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Objects;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -76,8 +77,8 @@ public class FeignHalAutoConfiguration {
 				.getIfAvailable(() -> new DefaultCurieProvider(Collections.emptyMap()));
 
 		Jackson2HalModule.HalHandlerInstantiator halHandlerInstantiator = new Jackson2HalModule.HalHandlerInstantiator(
-				linkRelationProvider.getIfAvailable(), curieProviderInstance,
-				messageResolver.getIfAvailable(), configuration);
+			Objects.requireNonNull(linkRelationProvider.getIfAvailable()), curieProviderInstance,
+			Objects.requireNonNull(messageResolver.getIfAvailable()), configuration);
 
 		mapper.setHandlerInstantiator(halHandlerInstantiator);
 
@@ -88,7 +89,7 @@ public class FeignHalAutoConfiguration {
 
 		TypeConstrainedMappingJackson2HttpMessageConverter converter = new TypeConstrainedMappingJackson2HttpMessageConverter(
 				RepresentationModel.class);
-		converter.setSupportedMediaTypes(Arrays.asList(HAL_JSON));
+		converter.setSupportedMediaTypes(Collections.singletonList(HAL_JSON));
 		converter.setObjectMapper(mapper);
 		return converter;
 	}

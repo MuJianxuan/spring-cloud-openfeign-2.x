@@ -11,6 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @Date: 2020/5/5 0005 16:44
  */
 @SpringBootApplication
+// 这个注解的意思应该是暴露自己，把自己注册到注册中心去
 @EnableDiscoveryClient
 // 源码解析
 @EnableFeignClients

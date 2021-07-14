@@ -36,6 +36,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 
 /**
+ * 如果正在使用 Feign 并且需要使用 Ribbon 作为负载均衡器，则将激活自动配置。
+ *
  * Autoconfiguration to be activated if Feign is in use and needs to be use Ribbon as a
  * load balancer.
  *

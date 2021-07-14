@@ -20,11 +20,12 @@ import feign.Feign;
 import feign.Target;
 
 /**
+ * 目标者
+ *   FeignClients 注解 实际的操作对象
  * @author Spencer Gibb
  */
 interface Targeter {
 
-	<T> T target(FeignClientFactoryBean factory, Feign.Builder feign,
-			FeignContext context, Target.HardCodedTarget<T> target);
+	<T> T target(FeignClientFactoryBean factory, Feign.Builder feign, FeignContext context, Target.HardCodedTarget<T> target);
 
 }

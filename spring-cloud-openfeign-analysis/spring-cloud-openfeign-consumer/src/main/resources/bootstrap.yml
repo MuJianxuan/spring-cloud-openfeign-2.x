@@ -3,11 +3,14 @@ server:
 spring:
   application:
     name: openfeign-consumer
+  main:
+    allow-bean-definition-overriding: true
   cloud:
     nacos:
       discovery:
-        server-addr: ${REGISTER_HOST:192.168.235.3}:${REGISTER_PORT:8848}
+        server-addr: ${REGISTER_HOST:127.0.0.1}:${REGISTER_PORT:8848}
       config:
-        server-addr: ${REGISTER_HOST:192.168.235.3}:${REGISTER_PORT:8848}
+        server-addr: ${REGISTER_HOST:127.0.0.1}:${REGISTER_PORT:8848}
         file-extension: yaml
+
 

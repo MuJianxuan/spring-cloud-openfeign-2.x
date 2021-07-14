@@ -45,13 +45,20 @@ public class PathVariableParameterProcessor implements AnnotatedParameterProcess
 		return ANNOTATION;
 	}
 
+	/**
+	 * 前置检查
+	 * @param context the parameter context
+	 * @param annotation the annotation instance
+	 * @param method the method that contains the annotation
+	 * @return
+	 */
 	@Override
-	public boolean processArgument(AnnotatedParameterContext context,
-			Annotation annotation, Method method) {
+	public boolean processArgument(AnnotatedParameterContext context, Annotation annotation, Method method) {
 		String name = ANNOTATION.cast(annotation).value();
 		checkState(emptyToNull(name) != null,
 				"PathVariable annotation was empty on param %s.",
 				context.getParameterIndex());
+		// 设置参数名称
 		context.setParameterName(name);
 
 		MethodMetadata data = context.getMethodMetadata();

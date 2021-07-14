@@ -28,7 +28,7 @@ public class UserProviderController {
 	@GetMapping(value = "/{id}")
 	public Result get(@PathVariable String id) {
 		log.debug("get with id:{}", id);
-		return Result.success(User.builder().username("kongLiuYi").mobile("1397097....").name("空留意").build());
+		return Result.success(new User().setUsername("kongLiuYi").setMobile("1397097....").setName("空留意"));
 	}
 
 }

@@ -222,8 +222,7 @@ class FeignClientsRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
 					return clientClasses.contains(cleaned);
 				}
 			};
-			scanner.addIncludeFilter(
-					new AllTypeFilter(Arrays.asList(filter, annotationTypeFilter)));
+			scanner.addIncludeFilter( new AllTypeFilter(Arrays.asList(filter, annotationTypeFilter)));
 		}
 
 		// 遍历这个扫描包路径数组

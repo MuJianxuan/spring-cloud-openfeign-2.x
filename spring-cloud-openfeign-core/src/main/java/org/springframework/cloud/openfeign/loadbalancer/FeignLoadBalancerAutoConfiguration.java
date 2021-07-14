@@ -32,6 +32,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
+ * 实例化基于BlockingLoadBalancerClient的Client实现的自动配置。
+ * 为了使用这种负载平衡机制，必须通过将spring.cloud.loadbalancer.ribbon.enabled设置为true来禁用基于功能区的实现。
+ *
  * An autoconfiguration that instantiates {@link BlockingLoadBalancerClient}-based
  * implementations of {@link Client}. In order to use this load-balancing mechanism, the
  * Ribbon-based implementation has to be disabled by setting

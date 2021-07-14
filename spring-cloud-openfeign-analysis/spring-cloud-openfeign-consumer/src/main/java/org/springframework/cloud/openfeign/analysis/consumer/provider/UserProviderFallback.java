@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class UserProviderFallback implements  UserProvider {
 	@Override
 	public Result<User> get(String id) {
-		log.error("获取用户信息异常！未加载到用户信息");
+		log.error("获取用户信息异常！未加载到用户信息：{}",id);
 		return Result.fail();
 	}
 }
