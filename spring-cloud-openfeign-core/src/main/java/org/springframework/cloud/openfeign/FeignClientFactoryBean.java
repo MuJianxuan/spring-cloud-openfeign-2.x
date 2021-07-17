@@ -285,6 +285,7 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, A
 		if (client != null) {
 			builder.client(client);
 			Targeter targeter = get(context, Targeter.class);
+			// 本质是 targeter 来创建代理类
 			return targeter.target(this, builder, context, target);
 		}
 
@@ -299,6 +300,9 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, A
 
 	/**
 	 * 获取实际的Bean对象
+	 *
+	 * 创建代理，实现接口调用，我的接口的方法执行，需要有结果，这个时候应该是什么样的结果呢？
+	 *
 	 * @param <T> the target type of the Feign client
 	 * @return a {@link Feign} client created with the specified data and the context
 	 * information   使用指定数据和上下文信息创建的Feign客户端
@@ -324,7 +328,7 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, A
 			// 处理访问连接
 			this.url += cleanPath();
 
-			// 生成负载均衡代理类
+			// 生成负载均衡代理类   细看
 			return (T) loadBalance( builder, context,  new HardCodedTarget<>(this.type, this.name, this.url) );
 		}
 
@@ -348,9 +352,8 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, A
 			builder.client(client);
 		}
 		Targeter targeter = get(context, Targeter.class);
-		// 生成默认代理类
-		return (T) targeter.target(this, builder, context,
-				new HardCodedTarget<>(this.type, this.name, url));
+		// 生成默认代理类  细看
+		return (T) targeter.target(this, builder, context, new HardCodedTarget<>(this.type, this.name, url));
 	}
 
 	private String cleanPath() {

@@ -30,6 +30,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
+ * Http客户端 负载配置
+ *
  * @author Spencer Gibb
  * @author Olga Maciaszek-Sharma
  */

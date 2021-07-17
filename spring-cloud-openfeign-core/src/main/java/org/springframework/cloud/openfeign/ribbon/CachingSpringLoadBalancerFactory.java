@@ -27,6 +27,8 @@ import org.springframework.cloud.netflix.ribbon.SpringClientFactory;
 import org.springframework.util.ConcurrentReferenceHashMap;
 
 /**
+ * SpringLoadBalancer 实例的工厂，用于缓存创建的条目。
+ *
  * Factory for SpringLoadBalancer instances that caches the entries created.
  *
  * @author Spencer Gibb

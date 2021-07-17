@@ -35,8 +35,14 @@ class HystrixTargeter implements Targeter {
 	public <T> T target(FeignClientFactoryBean factory, Feign.Builder feign, FeignContext context, Target.HardCodedTarget<T> target) {
 		// 非 hystrix
 		if (! (feign instanceof feign.hystrix.HystrixFeign.Builder)) {
+
+			/**
+			 * 返回一个代理对象
+			 */
 			return feign.target(target);
 		}
+
+		// 关于hystrix 的封装不是重点
 		feign.hystrix.HystrixFeign.Builder builder = (feign.hystrix.HystrixFeign.Builder) feign;
 		String name = StringUtils.isEmpty(factory.getContextId()) ? factory.getName()
 				: factory.getContextId();
