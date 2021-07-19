@@ -42,6 +42,10 @@ public class CachingSpringLoadBalancerFactory {
 
 	protected LoadBalancedRetryFactory loadBalancedRetryFactory = null;
 
+	/**
+	 * 路由器负载 缓存 ：
+	 * 1、调用负载，key是什么？
+	 */
 	private volatile Map<String, FeignLoadBalancer> cache = new ConcurrentReferenceHashMap<>();
 
 	public CachingSpringLoadBalancerFactory(SpringClientFactory factory) {
@@ -54,19 +58,34 @@ public class CachingSpringLoadBalancerFactory {
 		this.loadBalancedRetryFactory = loadBalancedRetryPolicyFactory;
 	}
 
+	/**
+	 *  关注 clientName 是什么
+	 * @param clientName
+	 * @return
+	 */
 	public FeignLoadBalancer create(String clientName) {
+		/**
+		 * 尝试从缓存中获取  看下缓存设计
+		 */
 		FeignLoadBalancer client = this.cache.get(clientName);
 		if (client != null) {
 			return client;
 		}
 		IClientConfig config = this.factory.getClientConfig(clientName);
+		/**
+		 * 获取负载进行调度服务实例   lb负载均衡器
+		 * 1、似乎从容器中获取 对应的实例
+		 */
 		ILoadBalancer lb = this.factory.getLoadBalancer(clientName);
-		ServerIntrospector serverIntrospector = this.factory.getInstance(clientName,
-				ServerIntrospector.class);
+		// 获取实例
+		ServerIntrospector serverIntrospector = this.factory.getInstance(clientName, ServerIntrospector.class);
+		//
 		client = this.loadBalancedRetryFactory != null
 				? new RetryableFeignLoadBalancer(lb, config, serverIntrospector,
 						this.loadBalancedRetryFactory)
 				: new FeignLoadBalancer(lb, config, serverIntrospector);
+
+		// 存入缓存
 		this.cache.put(clientName, client);
 		return client;
 	}
