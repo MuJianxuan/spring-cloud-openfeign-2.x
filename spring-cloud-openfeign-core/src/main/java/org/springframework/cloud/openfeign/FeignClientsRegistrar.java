@@ -251,6 +251,8 @@ class FeignClientsRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
 					// 获取 ClientName ，优先级 value >= name > serviceId > contextId
 					String name = getClientName(attributes);
 					// 和之前类似，注册一个 FeignClientSpecification 的 BeanDefinition，之前是全局默认
+
+					// 为 每一个 @FeignClient 注解都添加一个 configuration 的 beanDefinition
 					registerClientConfiguration( registry, name, attributes.get("configuration"));
 
 					// 需要留意的是 这里是每一个 FeignClient 接口都注入一个相应处理的  FeignClientFactoryBean
@@ -443,11 +445,9 @@ class FeignClientsRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
 	 * @param name
 	 * @param configuration
 	 */
-	private void registerClientConfiguration(BeanDefinitionRegistry registry, Object name,
-			Object configuration) {
+	private void registerClientConfiguration(BeanDefinitionRegistry registry, Object name, Object configuration) {
 		// 注册 BeanDefinitionBuilder
-		BeanDefinitionBuilder builder = BeanDefinitionBuilder
-				.genericBeanDefinition(FeignClientSpecification.class);
+		BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(FeignClientSpecification.class);
 		// FeignClientSpecification 的属性 name 和 configuration 以构造方法注入,其值如下
 		builder.addConstructorArgValue(name);
 		builder.addConstructorArgValue(configuration);

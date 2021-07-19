@@ -3,8 +3,6 @@ package org.springframework.cloud.openfeign.analysis.consumer.factorybean;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.FactoryBean;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
