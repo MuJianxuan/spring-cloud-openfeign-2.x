@@ -33,6 +33,9 @@ class DefaultFeignLoadBalancedConfiguration {
 	@ConditionalOnMissingBean
 	public Client feignClient(CachingSpringLoadBalancerFactory cachingFactory,
 			SpringClientFactory clientFactory) {
+		/**
+		 * 获取是这一时刻加载的
+		 */
 		return new LoadBalancerFeignClient(new Client.Default(null, null), cachingFactory,
 				clientFactory);
 	}

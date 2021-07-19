@@ -59,6 +59,9 @@ public class FeignBlockingLoadBalancerClient implements Client {
 		String serviceId = originalUri.getHost();
 		Assert.state(serviceId != null,
 				"Request URI does not contain a valid hostname: " + originalUri);
+		/**
+		 * 执行调用服务的关键  需要关注 ： loadBalancerClient
+		 */
 		ServiceInstance instance = loadBalancerClient.choose(serviceId);
 		if (instance == null) {
 			String message = "Load balancer does not contain an instance for the service "

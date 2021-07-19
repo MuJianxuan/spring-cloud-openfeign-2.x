@@ -47,6 +47,8 @@ import org.springframework.util.StringUtils;
 
 /**
  *
+ * @FeignClient 注解的接口的bean定义是此类，因此需要关注类的 getObject() 方法。
+ *
  * 关注InitializingBean 接口
  *
  * @author Spencer Gibb
@@ -59,6 +61,9 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, A
 	/***********************************
 	 * WARNING! Nothing in this class should be @Autowired. It causes NPEs because of some
 	 * lifecycle race condition.
+	 *
+	 * 警告！此类中的任何内容都不应该是@Autowired。由于某些生命周期竞争条件，它会导致 NPE
+	 *
 	 ***********************************/
 
 	/**
@@ -66,12 +71,24 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, A
 	 */
 	private Class<?> type;
 
+	/**
+	 *  serverId 若存在则是 远程调用服务名： 需要结合服务
+	 */
 	private String name;
 
+	/**
+	 * 请求的服务http地址
+	 */
 	private String url;
 
+	/**
+	 * 如果存在，这将用作 bean 名称而不是名称，但不会用作服务 ID。
+	 */
 	private String contextId;
 
+	/**
+	 * 前缀请求路径
+	 */
 	private String path;
 
 	private boolean decode404;
@@ -279,12 +296,22 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, A
 		return context.getInstance(this.contextId, type);
 	}
 
+	/**
+	 *   target 封装的是 url  http访问地址
+	 * 返回 代理实例
+	 * @param builder
+	 * @param context
+	 * @param target
+	 * @param <T>
+	 * @return
+	 */
 	protected <T> T loadBalance(Feign.Builder builder, FeignContext context, HardCodedTarget<T> target) {
 		// 获得 FeignClient
 		Client client = getOptional(context, Client.class);
 		if (client != null) {
 			builder.client(client);
 			Targeter targeter = get(context, Targeter.class);
+
 			// 本质是 targeter 来创建代理类
 			return targeter.target(this, builder, context, target);
 		}
@@ -302,6 +329,7 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, A
 	 * 获取实际的Bean对象
 	 *
 	 * 创建代理，实现接口调用，我的接口的方法执行，需要有结果，这个时候应该是什么样的结果呢？
+	 *   似乎还做了 服务的拉取
 	 *
 	 * @param <T> the target type of the Feign client
 	 * @return a {@link Feign} client created with the specified data and the context
@@ -328,15 +356,21 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, A
 			// 处理访问连接
 			this.url += cleanPath();
 
-			// 生成负载均衡代理类   细看
+			// 生成负载均衡代理类
+			/**
+			 *  基于 url 的 lb
+			 */
 			return (T) loadBalance( builder, context,  new HardCodedTarget<>(this.type, this.name, this.url) );
 		}
 
-		// url 存在那代表的意义是不是有具体的地址，所以没有负载均衡能力？以后测试一下
+		// 猜想是 兼容 url设置成服务名
 		if (StringUtils.hasText(this.url) && !this.url.startsWith("http")) {
 			this.url = "http://" + this.url;
 		}
+
 		String url = this.url + cleanPath();
+
+		// 获取的是 哪个实例
 		Client client = getOptional(context, Client.class);
 		if (client != null) {
 			if (client instanceof LoadBalancerFeignClient) {
@@ -349,10 +383,14 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, A
 				// but Spring Cloud LoadBalancer is on the classpath, so unwrap
 				client = ((FeignBlockingLoadBalancerClient) client).getDelegate();
 			}
+			//  设置调用客户端的意思吧
 			builder.client(client);
 		}
 		Targeter targeter = get(context, Targeter.class);
-		// 生成默认代理类  细看
+		// 生成默认代理类
+		/**
+		 *  此时 url 并没有先将 name（远程调用服务名） 拼接
+		 */
 		return (T) targeter.target(this, builder, context, new HardCodedTarget<>(this.type, this.name, url));
 	}
 
