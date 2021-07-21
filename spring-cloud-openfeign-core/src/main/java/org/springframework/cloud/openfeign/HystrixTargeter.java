@@ -31,12 +31,30 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("unchecked")
 class HystrixTargeter implements Targeter {
 
+	/**
+	 *
+	 * @param factory
+	 * @param feign
+	 * @param context
+	 * @param target HardCodedTarget 封装 接口类型，服务地址 or url
+	 * @param <T>
+	 * @return
+	 */
 	@Override
 	public <T> T target(FeignClientFactoryBean factory, Feign.Builder feign, FeignContext context, Target.HardCodedTarget<T> target) {
 		// 非 hystrix
+		/**
+		 * feign 是 Feign的建造者
+		 */
 		if (! (feign instanceof feign.hystrix.HystrixFeign.Builder)) {
+
+			/**
+			 * 返回一个代理对象
+			 */
 			return feign.target(target);
 		}
+
+		// 关于hystrix 的封装不是重点
 		feign.hystrix.HystrixFeign.Builder builder = (feign.hystrix.HystrixFeign.Builder) feign;
 		String name = StringUtils.isEmpty(factory.getContextId()) ? factory.getName()
 				: factory.getContextId();

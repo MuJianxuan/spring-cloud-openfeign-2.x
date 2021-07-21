@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *~
 #*
 *#
@@ -22,3 +23,23 @@ _site/
 .flattened-pom.xml
 .iml
 
+=======
+# Except this file !.gitignore 
+.classpath
+.project
+.settings
+target
+.idea
+.vscode
+.DS_Store
+.factorypath
+/logs
+*.iml
+node_modules
+test/derby.log
+derby.log
+work
+test/logs
+yarn.lock
+.flattened-pom.xml
+>>>>>>> 521d94a9471a28832faf262e2971bbcdc06033dd

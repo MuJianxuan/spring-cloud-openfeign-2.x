@@ -22,7 +22,7 @@ import java.util.Objects;
 import org.springframework.cloud.context.named.NamedContextFactory;
 
 /**
- *
+ * Feign 客户端规范
  *
  * Specification: 规格
  * @author Dave Syer

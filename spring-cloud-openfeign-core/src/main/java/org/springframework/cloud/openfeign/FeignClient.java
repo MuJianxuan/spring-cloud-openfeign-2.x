@@ -56,6 +56,7 @@ public @interface FeignClient {
 	String serviceId() default "";
 
 	/**
+	 * 如果存在，这将用作 bean 名称而不是名称，但不会用作服务 ID。
 	 * This will be used as the bean name instead of name if present, but will not be used
 	 * as a service id.
 	 * @return bean name instead of name if present
@@ -112,6 +113,7 @@ public @interface FeignClient {
 	Class<?> fallbackFactory() default void.class;
 
 	/**
+	 * 所有方法级映射使用的路径前缀。 可以与或不与@RibbonClient一起使用。
 	 * @return path prefix to be used by all method-level mappings. Can be used with or
 	 * without <code>@RibbonClient</code>.
 	 */

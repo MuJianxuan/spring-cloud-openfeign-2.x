@@ -280,6 +280,7 @@ class FeignClientsRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
 		// 3.添加 FeignClientFactoryBean 的各个属性值，以下赋值都支持 SPEL 表达式
 		definition.addPropertyValue("url", getUrl(attributes));
 		definition.addPropertyValue("path", getPath(attributes));
+		// 远程调用服务名  若指定地址则会是： url
 		String name = getName(attributes);
 		definition.addPropertyValue("name", name);
 		// 获取优先级 contextId > serviceId > name > value ，校验合法性
@@ -319,6 +320,11 @@ class FeignClientsRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
 		validateFallbackFactory(annotation.getClass("fallbackFactory"));
 	}
 
+	/**
+	 *  serviceId >> name >> value
+	 * @param attributes
+	 * @return
+	 */
 	/* for testing */ String getName(Map<String, Object> attributes) {
 		String name = (String) attributes.get("serviceId");
 		if (!StringUtils.hasText(name)) {

@@ -20,6 +20,7 @@ import feign.Feign;
 import feign.Target;
 
 /**
+ * 瞄准者？
  * @author Spencer Gibb
  */
 class DefaultTargeter implements Targeter {
