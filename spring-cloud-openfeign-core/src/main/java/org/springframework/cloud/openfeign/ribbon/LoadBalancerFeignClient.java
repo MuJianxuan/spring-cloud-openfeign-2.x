@@ -78,7 +78,7 @@ public class LoadBalancerFeignClient implements Client {
 			FeignLoadBalancer.RibbonRequest ribbonRequest = new FeignLoadBalancer.RibbonRequest(
 					this.delegate, request, uriWithoutHost);
 
-			IClientConfig requestConfig = getClientConfig(options, clientName);
+			IClientConfig requestConfig = getClientConfig(options, clientName);  //
 			return lbClient(clientName)
 					.executeWithLoadBalancer(ribbonRequest, requestConfig).toResponse();
 		}
@@ -120,6 +120,9 @@ public class LoadBalancerFeignClient implements Client {
 		return this.lbClientFactory.create(clientName);
 	}
 
+	/**
+	 * Feign 选项客户端配置
+	 */
 	static class FeignOptionsClientConfig extends DefaultClientConfigImpl {
 
 		FeignOptionsClientConfig(Request.Options options) {

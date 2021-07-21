@@ -60,7 +60,7 @@ public class CachingSpringLoadBalancerFactory {
 
 	/**
 	 *  关注 clientName 是什么
-	 * @param clientName
+	 * @param clientName  eg: openfeign-provider
 	 * @return
 	 */
 	public FeignLoadBalancer create(String clientName) {
