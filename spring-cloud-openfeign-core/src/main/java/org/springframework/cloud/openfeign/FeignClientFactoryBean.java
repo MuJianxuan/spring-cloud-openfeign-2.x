@@ -47,7 +47,7 @@ import org.springframework.util.StringUtils;
 
 /**
  *
- * 关注InitializingBean 接口
+ * 这个才是 @Feignclient 接口的容器实例
  *
  * @author Spencer Gibb
  * @author Venil Noronha
@@ -64,17 +64,17 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, A
 	/**
 	 * 类型  : 盲猜 >> 接口类型
 	 */
-	private Class<?> type;
+	private Class<?> type; //interface org.springframework.cloud.openfeign.analysis.consumer.provider.UserProvider
 
-	private String name;
+	private String name; //openfeign-provider
 
 	private String url;
 
-	private String contextId;
+	private String contextId; // openfeign-provider
 
 	private String path;
 
-	private boolean decode404;
+	private boolean decode404; // false
 
 	private ApplicationContext applicationContext;
 
@@ -282,7 +282,7 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, A
 	protected <T> T loadBalance(Feign.Builder builder, FeignContext context, HardCodedTarget<T> target) {
 		// 获得 FeignClient
 		Client client = getOptional(context, Client.class);
-		if (client != null) {
+		if (client != null) { // default.com.alibaba.cloud.nacos.ribbon.RibbonNacosAutoConfiguration
 			builder.client(client);
 			Targeter targeter = get(context, Targeter.class);
 			return targeter.target(this, builder, context, target);
@@ -313,7 +313,7 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, A
 		// 判断生成的代理对象类型，如果 url 为空，则走负载均衡，生成有负载均衡功能的代理类
 		// 如果不包含文本
 		// 域名服务器 则不需要解析 服务名获取数据
-		if (! StringUtils.hasText( this.url)) {
+		if (! StringUtils.hasText( this.url)) { // url: "" 会进判断
 			// url 使用域名形似所以有负载均衡
 			if (! this.name.startsWith("http")) {
 				this.url = "http://" + this.name;
@@ -322,7 +322,7 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, A
 				this.url = this.name;
 			}
 			// 处理访问连接
-			this.url += cleanPath();
+			this.url += cleanPath(); // http://openfeign-provider
 
 			// 生成负载均衡代理类
 			return (T) loadBalance( builder, context,  new HardCodedTarget<>(this.type, this.name, this.url) );

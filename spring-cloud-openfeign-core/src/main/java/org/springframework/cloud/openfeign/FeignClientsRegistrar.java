@@ -163,11 +163,11 @@ class FeignClientsRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
 	private void registerDefaultConfiguration(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
 		// 获取 EnableFeignClients 中属性值
 		Map<String, Object> defaultAttrs = metadata
-				.getAnnotationAttributes(EnableFeignClients.class.getName(), true);
+				.getAnnotationAttributes(EnableFeignClients.class.getName(), true);   // 5key 值全空
 
 		// 这里要注意的是 defaultAttrs.containsKey("defaultConfiguration")
 		if (defaultAttrs != null && defaultAttrs.containsKey("defaultConfiguration")) {
-			String name;
+			String name; // default.org.springframework.cloud.openfeign.analysis.consumer.SpringCloudOpenfeignConsumerApplication
 			if (metadata.hasEnclosingClass()) {
 				name = "default." + metadata.getEnclosingClassName();
 			}
@@ -249,14 +249,14 @@ class FeignClientsRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
 					Map<String, Object> attributes = annotationMetadata.getAnnotationAttributes( FeignClient.class.getCanonicalName());
 
 					// 获取 ClientName ，优先级 value >= name > serviceId > contextId
-					String name = getClientName(attributes);
+					String name = getClientName(attributes); // openfeign-provider
 					// 和之前类似，注册一个 FeignClientSpecification 的 BeanDefinition，之前是全局默认
 
 					// 为 每一个 @FeignClient 注解都添加一个 configuration 的 beanDefinition
 					registerClientConfiguration( registry, name, attributes.get("configuration"));
 
 					// 需要留意的是 这里是每一个 FeignClient 接口都注入一个相应处理的  FeignClientFactoryBean
-					// 注册一个 FeignClientFactoryBean 的 BeanDefinition  把谁注册？ 是被@FeignClient注解接口
+					// 注册一个 FeignClientFactoryBean 的 BeanDefinition
 					registerFeignClient( registry, annotationMetadata, attributes);
 				}
 			}
@@ -272,7 +272,7 @@ class FeignClientsRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
 	 */
 	private void registerFeignClient(BeanDefinitionRegistry registry, AnnotationMetadata annotationMetadata, Map<String, Object> attributes) {
 		// 1.获取类名称，也就是被 @FeignClient 注解修饰的接口
-		String className = annotationMetadata.getClassName();
+		String className = annotationMetadata.getClassName(); // org.springframework.cloud.openfeign.analysis.consumer.provider.UserProvider
 		// 2.使用 BeanDefinitionBuilder 构造bean：FeignClientFactoryBean
 		BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(  FeignClientFactoryBean.class);
 		// 校验 Fallback 和 FallbackFactory （必须实现被 @FeignClient 这个接口）
@@ -451,7 +451,7 @@ class FeignClientsRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
 		// FeignClientSpecification 的属性 name 和 configuration 以构造方法注入,其值如下
 		builder.addConstructorArgValue(name);
 		builder.addConstructorArgValue(configuration);
-		// 将 BeanDefinition 注册进容器中
+		// 将 BeanDefinition 注册进容器中  name 为@FeignClient 注解指定的 name=openfeign-provider.FeignClientSpecification
 		registry.registerBeanDefinition(
 				name + "." + FeignClientSpecification.class.getSimpleName(),
 				builder.getBeanDefinition());
