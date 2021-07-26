@@ -23,9 +23,10 @@ import org.springframework.cloud.context.named.NamedContextFactory;
  * 这个我没看懂，似乎这个很重要
  *  1、服务启动会注入这个bean，我们看这个bean都做了那些事情
  *
+ *  根据 Ribbon 的 SpringClientFactory 类的意思
+ *      创建 feign 类实例的工厂。 它为每个客户端名称创建一个 Spring ApplicationContext，并从那里提取它需要的 bean。
+ *      客户端名称 >>  即远程调用服务的名称关联
  *
- *
- * 创建 feign 类实例的工厂。 它为每个客户端名称创建一个 Spring ApplicationContext，并从那里提取它需要的 bean。
  * A factory that creates instances of feign classes. It creates a Spring
  * ApplicationContext per client name, and extracts the beans that it needs from there.
  *
@@ -36,7 +37,7 @@ public class FeignContext extends NamedContextFactory<FeignClientSpecification> 
 
 	public FeignContext() {
 
-		super(FeignClientsConfiguration.class, "feign", "feign.client.name");
+		super( FeignClientsConfiguration.class, "feign", "feign.client.name");
 	}
 
 }

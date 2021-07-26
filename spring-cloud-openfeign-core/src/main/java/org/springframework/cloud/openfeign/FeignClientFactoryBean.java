@@ -110,7 +110,7 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean, A
 
 	/**
 	 * feign
-	 * @param context
+	 * @param context  feign 子容器
 	 * @return
 	 */
 	protected Feign.Builder feign(FeignContext context) {

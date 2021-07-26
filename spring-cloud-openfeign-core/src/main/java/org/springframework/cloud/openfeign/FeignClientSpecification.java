@@ -37,6 +37,7 @@ class FeignClientSpecification implements NamedContextFactory.Specification {
 
 	/**
 	 * bean 的配置
+	 *   关注存放了啥， 这里涉及到 namedContextFactory 子容器的bean 隔离
 	 */
 	private Class<?>[] configuration;
 
