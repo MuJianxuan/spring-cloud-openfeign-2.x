@@ -1,6 +1,5 @@
 package org.springframework.cloud.openfeign.analysis.consumer.namedcontextfactory;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.cloud.context.named.NamedContextFactory;
