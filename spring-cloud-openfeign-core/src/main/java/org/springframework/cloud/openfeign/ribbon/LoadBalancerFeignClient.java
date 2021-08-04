@@ -78,7 +78,7 @@ public class LoadBalancerFeignClient implements Client {
 			FeignLoadBalancer.RibbonRequest ribbonRequest = new FeignLoadBalancer.RibbonRequest(
 					this.delegate, request, uriWithoutHost);
 
-			IClientConfig requestConfig = getClientConfig(options, clientName);  //
+			IClientConfig requestConfig = getClientConfig(options, clientName);  // options ：封装的参数   clientName：服务名(openfeign-provdei)
 			return lbClient(clientName)
 					.executeWithLoadBalancer(ribbonRequest, requestConfig).toResponse();
 		}
