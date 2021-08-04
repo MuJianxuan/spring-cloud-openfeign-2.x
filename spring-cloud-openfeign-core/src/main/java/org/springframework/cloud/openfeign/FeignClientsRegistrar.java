@@ -253,6 +253,9 @@ class FeignClientsRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
 					// 和之前类似，注册一个 FeignClientSpecification 的 BeanDefinition，之前是全局默认
 
 					// 为 每一个 @FeignClient 注解都添加一个 configuration 的 beanDefinition
+					/**
+					 *  这里注入的是 对应的 配置
+					 */
 					registerClientConfiguration( registry, name, attributes.get("configuration"));
 
 					// 需要留意的是 这里是每一个 FeignClient 接口都注入一个相应处理的  FeignClientFactoryBean
@@ -306,6 +309,9 @@ class FeignClientsRegistrar implements ImportBeanDefinitionRegistrar, ResourceLo
 			alias = qualifier;
 		}
 
+		/**
+		 * 实际为 接口注入到spring的实例
+		 */
 		BeanDefinitionHolder holder = new BeanDefinitionHolder(beanDefinition, className,
 				new String[] { alias });
 		// 5.注册 FeignClientFactoryBean 的 BeanDefinition

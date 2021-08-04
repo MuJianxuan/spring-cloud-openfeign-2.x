@@ -58,6 +58,8 @@ import org.springframework.format.support.FormattingConversionService;
 import static feign.form.ContentType.MULTIPART;
 
 /**
+ *  这个bean也是每次获取才创建 的 且隔离
+ *
  * @author Dave Syer
  * @author Venil Noronha
  * @author Darren Foong

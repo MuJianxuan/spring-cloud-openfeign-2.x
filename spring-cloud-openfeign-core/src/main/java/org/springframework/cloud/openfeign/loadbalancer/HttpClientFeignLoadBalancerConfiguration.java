@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
+ * 配置实例化基于BlockingLoadBalancerClient的Client对象，该对象在ApacheHttpClient使用ApacheHttpClient
  * Configuration instantiating a {@link BlockingLoadBalancerClient}-based {@link Client}
  * object that uses {@link ApacheHttpClient} under the hood.
  *

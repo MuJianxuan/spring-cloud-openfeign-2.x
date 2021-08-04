@@ -66,6 +66,7 @@ public class FeignAutoConfiguration {
 
 	/**
 	 * 所有的配置信息
+	 *   这是从 父容器获取的实例列表  其本质是 @FeignClient 注解的接口
 	 */
 	@Autowired(required = false)
 	private List<FeignClientSpecification> configurations = new ArrayList<>();
@@ -75,6 +76,15 @@ public class FeignAutoConfiguration {
 		return HasFeatures.namedFeature("Feign", Feign.class);
 	}
 
+	/**
+	 * 配置子容器
+	 *
+	 *   猜测：
+	 *   1、FeignContext 子容器的值都是隔离的
+	 *   2、每一个 FeignClientSpecification 都是隔离的
+	 *
+	 * @return
+	 */
 	@Bean
 	public FeignContext feignContext() {
 		FeignContext context = new FeignContext();
